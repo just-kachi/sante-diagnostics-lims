@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lims.controllers.SampleTrackingController"
+            prefWidth="1100"
+            prefHeight="650">
+
+    <top>
+        <VBox spacing="8">
+            <padding>
+                <Insets top="15" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <Label text="Sample Lifecycle Tracking"
+                   style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+            <Label text="Update and monitor samples from request through collection, processing, validation, and readiness."/>
+
+            <HBox spacing="10">
+                <TextField fx:id="searchSampleField"
+                           promptText="Search by customer, test, request ID, or status"
+                           prefWidth="320"/>
+
+                <ComboBox fx:id="filterStatusComboBox"
+                          promptText="Filter Status"
+                          prefWidth="160"/>
+
+                <Button fx:id="refreshButton"
+                        text="Refresh"
+                        onAction="#handleRefresh"/>
+
+                <Button fx:id="backButton"
+                        text="Back"
+                        onAction="#handleBack"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="samplesTable" prefHeight="430">
+            <columns>
+                <TableColumn fx:id="sampleIdColumn" text="Sample ID" prefWidth="90"/>
+                <TableColumn fx:id="requestIdColumn" text="Request ID" prefWidth="90"/>
+                <TableColumn fx:id="customerNameColumn" text="Customer" prefWidth="160"/>
+                <TableColumn fx:id="testNameColumn" text="Test" prefWidth="170"/>
+                <TableColumn fx:id="paymentStatusColumn" text="Payment" prefWidth="100"/>
+                <TableColumn fx:id="sampleStatusColumn" text="Sample Status" prefWidth="130"/>
+                <TableColumn fx:id="resultStatusColumn" text="Result" prefWidth="110"/>
+                <TableColumn fx:id="updatedAtColumn" text="Updated At" prefWidth="150"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <right>
+        <VBox spacing="10" prefWidth="330">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <Label text="Sample Details" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <TextArea fx:id="sampleDetailsArea"
+                      promptText="Select a sample"
+                      prefRowCount="13"
+                      wrapText="true"
+                      editable="false"/>
+
+            <Label text="Update Sample Status" style="-fx-font-weight: bold;"/>
+
+            <ComboBox fx:id="sampleStatusComboBox"
+                      promptText="New sample status"
+                      prefWidth="290"/>
+
+            <Label fx:id="errorLabel" textFill="red" wrapText="true"/>
+            <Label fx:id="successLabel" textFill="green" wrapText="true"/>
+
+            <Button fx:id="updateStatusButton"
+                    text="Update Status"
+                    onAction="#handleUpdateStatus"
+                    maxWidth="290"/>
+
+            <Button fx:id="viewDetailsButton"
+                    text="View Details"
+                    onAction="#handleViewDetails"
+                    maxWidth="290"/>
+        </VBox>
+    </right>
+</BorderPane>

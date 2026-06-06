@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lims.controllers.ResultUploadController"
+            prefWidth="1150"
+            prefHeight="680">
+
+    <top>
+        <VBox spacing="8">
+            <padding>
+                <Insets top="15" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <Label text="Result Upload"
+                   style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+            <Label text="Upload result values, PDF reports, or medical images. Uploaded results must still be validated before customers can view them."/>
+
+            <HBox spacing="10">
+                <TextField fx:id="searchResultField"
+                           promptText="Search by customer, test, status, request ID"
+                           prefWidth="350"/>
+
+                <Button fx:id="refreshButton"
+                        text="Refresh"
+                        onAction="#handleRefresh"/>
+
+                <Button fx:id="backButton"
+                        text="Back"
+                        onAction="#handleBack"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="resultsTable" prefHeight="430">
+            <columns>
+                <TableColumn fx:id="resultIdColumn" text="Result ID" prefWidth="80"/>
+                <TableColumn fx:id="requestIdColumn" text="Request ID" prefWidth="90"/>
+                <TableColumn fx:id="customerNameColumn" text="Customer" prefWidth="150"/>
+                <TableColumn fx:id="testNameColumn" text="Test" prefWidth="160"/>
+                <TableColumn fx:id="resultFormatColumn" text="Format" prefWidth="90"/>
+                <TableColumn fx:id="paymentStatusColumn" text="Payment" prefWidth="90"/>
+                <TableColumn fx:id="sampleStatusColumn" text="Sample" prefWidth="110"/>
+                <TableColumn fx:id="resultStatusColumn" text="Result" prefWidth="110"/>
+                <TableColumn fx:id="uploadedAtColumn" text="Uploaded At" prefWidth="150"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <right>
+        <VBox spacing="10" prefWidth="350">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <Label text="Upload Result" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <Label fx:id="resultDetailsLabel"
+                   text="Select a result to view details."
+                   wrapText="true"/>
+
+            <TextArea fx:id="resultValueArea"
+                      promptText="Enter numeric/text result value or notes"
+                      prefRowCount="8"
+                      wrapText="true"/>
+
+            <Label fx:id="selectedFileLabel" text="No file selected" wrapText="true"/>
+
+            <Button fx:id="chooseFileButton"
+                    text="Choose PDF/Image File"
+                    onAction="#handleChooseFile"
+                    maxWidth="310"/>
+
+            <Label fx:id="errorLabel" textFill="red" wrapText="true"/>
+            <Label fx:id="successLabel" textFill="green" wrapText="true"/>
+
+            <Button fx:id="uploadResultButton"
+                    text="Upload Result"
+                    onAction="#handleUploadResult"
+                    maxWidth="310"/>
+
+            <Button fx:id="clearButton"
+                    text="Clear"
+                    onAction="#handleClear"
+                    maxWidth="310"/>
+        </VBox>
+    </right>
+</BorderPane>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lims.controllers.ManageUsersController"
+            prefWidth="1100"
+            prefHeight="650">
+
+    <top>
+        <VBox spacing="8">
+            <padding>
+                <Insets top="15" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <Label text="Manage Users"
+                   style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+            <Label text="Create staff/customer accounts. Staff-created users must change password on first login."/>
+
+            <HBox spacing="10">
+                <TextField fx:id="searchUserField"
+                           promptText="Search by name, email, or role"
+                           prefWidth="320"/>
+
+                <Button fx:id="refreshButton"
+                        text="Refresh"
+                        onAction="#handleRefresh"/>
+
+                <Button fx:id="backButton"
+                        text="Back"
+                        onAction="#handleBack"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="usersTable" prefHeight="430">
+            <columns>
+                <TableColumn fx:id="userIdColumn" text="ID" prefWidth="60"/>
+                <TableColumn fx:id="fullNameColumn" text="Full Name" prefWidth="180"/>
+                <TableColumn fx:id="emailColumn" text="Email" prefWidth="220"/>
+                <TableColumn fx:id="roleColumn" text="Role" prefWidth="130"/>
+                <TableColumn fx:id="emailVerifiedColumn" text="Verified" prefWidth="90"/>
+                <TableColumn fx:id="forcePasswordChangeColumn" text="Force Change" prefWidth="120"/>
+                <TableColumn fx:id="createdAtColumn" text="Created At" prefWidth="160"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <right>
+        <VBox spacing="10" prefWidth="330">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <Label text="Create User" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <TextField fx:id="fullNameField"
+                       promptText="Full name"/>
+
+            <TextField fx:id="emailField"
+                       promptText="Email address"/>
+
+            <PasswordField fx:id="temporaryPasswordField"
+                           promptText="Temporary password"/>
+
+            <ComboBox fx:id="roleComboBox"
+                      promptText="Select role"
+                      prefWidth="290"/>
+
+            <Label fx:id="errorLabel" textFill="red" wrapText="true"/>
+            <Label fx:id="successLabel" textFill="green" wrapText="true"/>
+
+            <Button fx:id="createUserButton"
+                    text="Create User"
+                    onAction="#handleCreateUser"
+                    maxWidth="290"/>
+        </VBox>
+    </right>
+</BorderPane>

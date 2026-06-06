@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lims.controllers.BrowseTestsController"
+            prefWidth="950"
+            prefHeight="620">
+
+    <top>
+        <VBox spacing="8">
+            <padding>
+                <Insets top="15" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <Label text="Browse Available Tests" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+            <Label text="Select a laboratory test and place a request."/>
+
+            <HBox spacing="10">
+                <TextField fx:id="searchTestField"
+                           promptText="Search by name, category, or format"
+                           prefWidth="300"/>
+
+                <ComboBox fx:id="categoryFilterComboBox"
+                          promptText="Category"
+                          prefWidth="180"/>
+
+                <Button fx:id="refreshButton"
+                        text="Refresh"
+                        onAction="#handleRefresh"/>
+
+                <Button fx:id="backButton"
+                        text="Back"
+                        onAction="#handleBack"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="testsTable" prefHeight="400">
+            <columns>
+                <TableColumn fx:id="testTypeIdColumn" text="ID" prefWidth="60"/>
+                <TableColumn fx:id="testNameColumn" text="Test Name" prefWidth="180"/>
+                <TableColumn fx:id="testCategoryColumn" text="Category" prefWidth="120"/>
+                <TableColumn fx:id="priceColumn" text="Price" prefWidth="100"/>
+                <TableColumn fx:id="tatHoursColumn" text="TAT Hours" prefWidth="100"/>
+                <TableColumn fx:id="resultFormatColumn" text="Format" prefWidth="100"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <right>
+        <VBox spacing="10" prefWidth="300">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <Label text="Selected Test Details" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <TextArea fx:id="selectedTestDetailsArea"
+                      promptText="Select a test to view details"
+                      prefRowCount="12"
+                      wrapText="true"
+                      editable="false"/>
+
+            <Label fx:id="errorLabel" textFill="red" wrapText="true"/>
+            <Label fx:id="successLabel" textFill="green" wrapText="true"/>
+
+            <Button fx:id="requestSelectedTestButton"
+                    text="Request Selected Test"
+                    onAction="#handleRequestSelectedTest"
+                    maxWidth="260"/>
+        </VBox>
+    </right>
+</BorderPane>
