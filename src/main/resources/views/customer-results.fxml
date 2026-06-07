@@ -90,6 +90,11 @@
                     text="Open Attached File"
                     onAction="#handleOpenFile"
                     maxWidth="320"/>
+
+            <Button fx:id="downloadFileButton"
+                    text="Download Attached File"
+                    onAction="#handleDownloadFile"
+                    maxWidth="320"/>
         </VBox>
     </right>
 </BorderPane>

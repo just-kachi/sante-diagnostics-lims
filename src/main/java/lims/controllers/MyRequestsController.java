@@ -3,6 +3,9 @@ package lims.controllers;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,6 +16,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Duration;
 import lims.models.TestRequest;
 import lims.models.User;
 import lims.services.TestRequestService;
@@ -69,6 +73,10 @@ public class MyRequestsController {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
+    // Drives the live countdown so the label refreshes every second
+    // without requiring user interaction.
+    private Timeline countdownTimeline;
+
     @FXML
     private void initialize() {
         setupFilters();
@@ -76,6 +84,44 @@ public class MyRequestsController {
         setupSelection();
         setupSearch();
         loadRequests();
+        startCountdownTimer();
+    }
+
+    /**
+     * Starts a JavaFX Timeline that refreshes the countdown label every second
+     * for the currently selected request. The timeline is also responsible for
+     * tearing itself down when the scene window is closed so it does not leak.
+     */
+    private void startCountdownTimer() {
+        countdownTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            TestRequest selected = myRequestsTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                updateCountdown(selected);
+            }
+        }));
+        countdownTimeline.setCycleCount(Animation.INDEFINITE);
+        countdownTimeline.play();
+
+        // Attach a one-shot listener that stops the timer cleanly when the
+        // window hosting this view is closed, so the screen exits without
+        // leaving a background task behind.
+        if (countdownLabel != null) {
+            countdownLabel.sceneProperty().addListener((sceneObs, oldScene, newScene) -> {
+                if (newScene != null) {
+                    newScene.windowProperty().addListener((winObs, oldWin, newWin) -> {
+                        if (newWin != null) {
+                            newWin.setOnHidden(e -> stopCountdownTimer());
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    private void stopCountdownTimer() {
+        if (countdownTimeline != null) {
+            countdownTimeline.stop();
+        }
     }
 
     private void setupFilters() {

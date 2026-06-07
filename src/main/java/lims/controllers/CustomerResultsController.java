@@ -1,6 +1,10 @@
 package lims.controllers;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -14,6 +18,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import lims.models.Result;
 import lims.models.ResultFile;
 import lims.models.User;
@@ -251,6 +257,61 @@ public class CustomerResultsController {
             showSuccess("Opening file: " + selectedFile.getFileName());
         } catch (IOException e) {
             showError("Could not open file: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Allows the customer to download (save a copy of) the selected attached
+     * result file to a destination of their choice using a JavaFX FileChooser.
+     * Reuses existing ResultFile metadata and on-disk storage — the file is
+     * simply copied from its stored path to the user-selected location.
+     */
+    @FXML
+    private void handleDownloadFile() {
+        clearMessages();
+
+        ResultFile selectedFile = resultFileComboBox.getSelectionModel().getSelectedItem();
+
+        if (selectedFile == null) {
+            showError("No PDF/image file is attached to this result.");
+            return;
+        }
+
+        // Defensive guard: a null or blank file path would cause Path.of(...)
+        // to throw NullPointerException / InvalidPathException, which is not
+        // caught by the IOException handler below. Fail gracefully instead.
+        if (selectedFile.getFilePath() == null || selectedFile.getFilePath().isBlank()) {
+            showError("File path missing for this attachment.");
+            return;
+        }
+
+        Path sourcePath = Path.of(selectedFile.getFilePath());
+
+        if (!Files.exists(sourcePath)) {
+            showError("File does not exist on the server: " + selectedFile.getFilePath());
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Download Result File");
+        fileChooser.setInitialFileName(selectedFile.getFileName());
+
+        Window window = resultFileComboBox.getScene() == null
+                ? null
+                : resultFileComboBox.getScene().getWindow();
+
+        File destination = fileChooser.showSaveDialog(window);
+
+        if (destination == null) {
+            // User cancelled the save dialog — nothing to do.
+            return;
+        }
+
+        try {
+            Files.copy(sourcePath, destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            showSuccess("Downloaded to: " + destination.getAbsolutePath());
+        } catch (IOException e) {
+            showError("Could not download file: " + e.getMessage());
         }
     }
 
