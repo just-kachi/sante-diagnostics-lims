@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import lims.database.DatabaseConnection;
@@ -31,6 +34,8 @@ public class CustomerDashboardController {
     @FXML
     private Label nextResultCountdownLabel;
 
+    private Timeline countdownTimeline;
+
     @FXML
     private void initialize() {
         User user = Session.getInstance().getCurrentUser();
@@ -38,6 +43,31 @@ public class CustomerDashboardController {
         if (user != null && welcomeLabel != null) {
             welcomeLabel.setText("Welcome, " + user.getFullName() + " (Customer)");
             loadDashboardStats(user.getId());
+            startCountdownTimer(user.getId());
+        }
+    }
+
+    private void startCountdownTimer(int customerId) {
+        countdownTimeline = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), event -> loadNextResultCountdown(customerId)));
+        countdownTimeline.setCycleCount(Animation.INDEFINITE);
+        countdownTimeline.play();
+
+        if (nextResultCountdownLabel != null) {
+            nextResultCountdownLabel.sceneProperty().addListener((sceneObs, oldScene, newScene) -> {
+                if (newScene != null) {
+                    newScene.windowProperty().addListener((winObs, oldWin, newWin) -> {
+                        if (newWin != null) {
+                            newWin.setOnHidden(e -> stopCountdownTimer());
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    private void stopCountdownTimer() {
+        if (countdownTimeline != null) {
+            countdownTimeline.stop();
         }
     }
 
@@ -53,7 +83,7 @@ public class CustomerDashboardController {
                 SELECT COUNT(*) AS total
                 FROM test_requests
                 WHERE customer_id = ?
-                  AND result_status <> 'VALIDATED'
+                                    AND request_status = 'ACTIVE'
                 """;
 
         setCountLabel(activeRequestsLabel, sql, customerId);
@@ -63,8 +93,9 @@ public class CustomerDashboardController {
         String sql = """
                 SELECT COUNT(*) AS total
                 FROM test_requests
+                                JOIN results r ON r.request_id = test_requests.id
                 WHERE customer_id = ?
-                  AND result_status = 'VALIDATED'
+                                    AND r.result_status = 'VALIDATED'
                 """;
 
         setCountLabel(readyResultsLabel, sql, customerId);
@@ -74,8 +105,9 @@ public class CustomerDashboardController {
         String sql = """
                 SELECT COUNT(*) AS total
                 FROM test_requests
+                                JOIN results r ON r.request_id = test_requests.id
                 WHERE customer_id = ?
-                  AND result_status = 'VALIDATED'
+                                    AND r.result_status = 'VALIDATED'
                 """;
 
         setCountLabel(pastResultsLabel, sql, customerId);
@@ -86,7 +118,7 @@ public class CustomerDashboardController {
                 SELECT estimated_ready_at
                 FROM test_requests
                 WHERE customer_id = ?
-                  AND result_status <> 'VALIDATED'
+                                    AND request_status = 'ACTIVE'
                   AND estimated_ready_at IS NOT NULL
                 ORDER BY estimated_ready_at ASC
                 LIMIT 1
