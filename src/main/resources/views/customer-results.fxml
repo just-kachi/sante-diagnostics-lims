@@ -10,91 +10,70 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21"
+<BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="lims.controllers.CustomerResultsController"
-            prefWidth="1050"
-            prefHeight="680">
+            stylesheets="@../styles/theme.css"
+            prefWidth="1280" prefHeight="780">
 
     <top>
-        <VBox spacing="8">
-            <padding>
-                <Insets top="15" right="20" bottom="10" left="20"/>
-            </padding>
-
-            <Label text="Result Vault"
-                   style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-
-            <Label text="View your validated laboratory results and open attached PDF reports or medical images."/>
-
-            <HBox spacing="10">
-                <TextField fx:id="searchResultField"
-                           promptText="Search by test, format, status, request ID"
-                           prefWidth="360"/>
-
-                <Button fx:id="refreshButton"
-                        text="Refresh"
-                        onAction="#handleRefresh"/>
-
-                <Button fx:id="backButton"
-                        text="Back"
-                        onAction="#handleBack"/>
-            </HBox>
-        </VBox>
+        <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="12">
+            <Label text="My Validated Results" styleClass="label-section"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="backButton" text="Back" styleClass="button-secondary" onAction="#handleBack"/>
+        </HBox>
     </top>
 
     <center>
-        <TableView fx:id="resultsTable" prefHeight="430">
-            <columns>
-                <TableColumn fx:id="resultIdColumn" text="Result ID" prefWidth="90"/>
-                <TableColumn fx:id="requestIdColumn" text="Request ID" prefWidth="100"/>
-                <TableColumn fx:id="testNameColumn" text="Test Name" prefWidth="220"/>
-                <TableColumn fx:id="resultFormatColumn" text="Format" prefWidth="110"/>
-                <TableColumn fx:id="resultStatusColumn" text="Status" prefWidth="120"/>
-                <TableColumn fx:id="validatedAtColumn" text="Validated At" prefWidth="170"/>
-            </columns>
-        </TableView>
-    </center>
+        <VBox spacing="14">
+            <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
 
-    <right>
-        <VBox spacing="10" prefWidth="360">
-            <padding>
-                <Insets top="15" right="20" bottom="15" left="20"/>
-            </padding>
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+                <Label text="Search:"/>
+                <TextField fx:id="searchResultField" promptText="Test name or result ID" prefWidth="280"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="refreshButton" text="Refresh" styleClass="button-secondary" onAction="#handleRefresh"/>
+            </HBox>
 
-            <Label text="Result Details" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <HBox spacing="14" VBox.vgrow="ALWAYS">
+                <VBox styleClass="card" spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="Result Vault" styleClass="label-section"/>
+                    <TableView fx:id="resultsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="resultIdColumn" text="Result ID" prefWidth="100"/>
+                            <TableColumn fx:id="requestIdColumn" text="Req ID" prefWidth="80"/>
+                            <TableColumn fx:id="testNameColumn" text="Test" prefWidth="220"/>
+                            <TableColumn fx:id="resultStatusColumn" text="Status" prefWidth="120"/>
+                            <TableColumn fx:id="validatedAtColumn" text="Validated At" prefWidth="170"/>
+                            <TableColumn fx:id="resultFormatColumn" text="Format" prefWidth="120"/>
+                        </columns>
+                    </TableView>
+                </VBox>
 
-            <TextArea fx:id="resultSummaryArea"
-                      promptText="Select a result to view details"
-                      prefRowCount="14"
-                      wrapText="true"
-                      editable="false"/>
+                <VBox styleClass="card" spacing="10" prefWidth="360">
+                    <Label text="Result Summary" styleClass="label-section"/>
+                    <TextArea fx:id="resultSummaryArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS"/>
 
-            <Label text="Attached Result Files" style="-fx-font-weight: bold;"/>
+                    <Label text="Attached Result Files" styleClass="label-section"/>
 
-            <ComboBox fx:id="resultFileComboBox"
-                      promptText="Select attached PDF/image"
-                      prefWidth="320"/>
+                    <ComboBox fx:id="resultFileComboBox"
+                              promptText="Select attached PDF/image"
+                              prefWidth="320"/>
 
-            <Label fx:id="errorLabel" textFill="red" wrapText="true"/>
-            <Label fx:id="successLabel" textFill="green" wrapText="true"/>
+                    <Label fx:id="errorLabel" styleClass="label-error" wrapText="true"/>
+                    <Label fx:id="successLabel" styleClass="label-success" wrapText="true"/>
 
-            <Button fx:id="viewResultButton"
-                    text="View Result Details"
-                    onAction="#handleViewResult"
-                    maxWidth="320"/>
+                    <HBox spacing="8">
+                        <Button fx:id="viewResultButton" text="View" onAction="#handleViewResult"/>
+                        <Button fx:id="downloadResultButton" text="Open Attached File" styleClass="button-accent" onAction="#handleOpenFile"/>
+                    </HBox>
 
-            <Button fx:id="openFileButton"
-                    text="Open Attached File"
-                    onAction="#handleOpenFile"
-                    maxWidth="320"/>
-
-            <Button fx:id="downloadFileButton"
-                    text="Download Attached File"
-                    onAction="#handleDownloadFile"
-                    maxWidth="320"/>
+                    <Label text="Only validated results are shown here." styleClass="label-muted" wrapText="true"/>
+                </VBox>
+            </HBox>
         </VBox>
-    </right>
+    </center>
 </BorderPane>

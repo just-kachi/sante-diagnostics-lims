@@ -3,52 +3,81 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="lims.controllers.LabAttendantDashboardController"
-      alignment="CENTER"
-      spacing="15"
-      prefWidth="700"
-      prefHeight="600">
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lims.controllers.LabAttendantDashboardController"
+            stylesheets="@../styles/theme.css"
+            prefWidth="1200" prefHeight="760">
 
-    <padding>
-        <Insets top="40" right="60" bottom="40" left="60"/>
-    </padding>
+    <left>
+        <VBox spacing="6" styleClass="sidebar" prefWidth="240">
+            <Label text="Sante Diagnostics" styleClass="label-brand"/>
+            <Label text="LAB ATTENDANT"/>
+            <Region prefHeight="20"/>
+            <Button text="Dashboard" styleClass="sidebar-button,sidebar-button-active" maxWidth="Infinity"/>
+            <Button fx:id="labRequestQueueButton" text="Request Queue"
+                    styleClass="sidebar-button" maxWidth="Infinity" onAction="#goToLabRequestQueue"/>
+            <Button fx:id="sampleTrackingButton" text="Sample Tracking"
+                    styleClass="sidebar-button" maxWidth="Infinity" onAction="#goToSampleTracking"/>
+            <Button fx:id="resultUploadButton" text="Result Upload"
+                    styleClass="sidebar-button" maxWidth="Infinity" onAction="#goToResultUpload"/>
+            <Button fx:id="manageUsersButton" text="Create Customer Account"
+                    styleClass="sidebar-button" maxWidth="Infinity" onAction="#goToManageUsers"/>       
+            <Button fx:id="resultValidationButton" text="Result Validation"
+                    styleClass="sidebar-button" maxWidth="Infinity" onAction="#goToResultValidation"/>
+            <Region VBox.vgrow="ALWAYS"/>
+            <Button fx:id="logoutButton" text="Logout"
+                    styleClass="sidebar-button" maxWidth="Infinity" onAction="#handleLogout"/>
+        </VBox>
+    </left>
 
-    <Label text="Lab Attendant Dashboard" style="-fx-font-size: 26px; -fx-font-weight: bold;"/>
-    <Label fx:id="welcomeLabel" text="Welcome, Lab Attendant"/>
+    <top>
+        <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="12">
+            <Label fx:id="welcomeLabel" text="Welcome, Lab Attendant" styleClass="label-section"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Laboratory Operations" styleClass="label-muted"/>
+        </HBox>
+    </top>
 
-    <Label text="Operational Fulfillment" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+    <center>
+        <VBox spacing="18">
+            <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
 
-    <Button fx:id="labRequestQueueButton"
-            text="Test Request Queue"
-            onAction="#goToLabRequestQueue"
-            maxWidth="300"/>
+            <Label text="Today's Workflow" styleClass="label-section"/>
 
-    <Button fx:id="sampleTrackingButton"
-            text="Sample Tracking"
-            onAction="#goToSampleTracking"
-            maxWidth="300"/>
+            <HBox spacing="16">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Pending Samples" styleClass="label-stat-caption"/>
+                    <Label fx:id="pendingSamplesLabel" text="0" styleClass="label-stat-value"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Processing" styleClass="label-stat-caption"/>
+                    <Label fx:id="processingSamplesLabel" text="0" styleClass="label-stat-value"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Ready for Validation" styleClass="label-stat-caption"/>
+                    <Label fx:id="readyForValidationLabel" text="0" styleClass="label-stat-value"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Validated Results" styleClass="label-stat-caption"/>
+                    <Label fx:id="validatedResultsLabel" text="0" styleClass="label-stat-value"/>
+                </VBox>
+            </HBox>
 
-    <Button fx:id="resultUploadButton"
-            text="Result Upload"
-            onAction="#goToResultUpload"
-            maxWidth="300"/>
-
-    <Button fx:id="resultValidationButton"
-            text="Result Validation"
-            onAction="#goToResultValidation"
-            maxWidth="300"/>
-    
-    <Button fx:id="manageUsersButton"
-        text="Create Customer Account"
-        onAction="#goToManageUsers"
-        maxWidth="300"/>
-
-    <Button fx:id="logoutButton"
-            text="Logout"
-            onAction="#handleLogout"
-            maxWidth="300"/>
-</VBox>
+            <VBox styleClass="card" spacing="10">
+                <Label text="Lab Quick Actions" styleClass="label-section"/>
+                <HBox spacing="10">
+                    <Button text="Open Request Queue" onAction="#goToLabRequestQueue"/>
+                    <Button text="Track Samples" styleClass="button-accent" onAction="#goToSampleTracking"/>
+                    <Button text="Upload Result" styleClass="button-secondary" onAction="#goToResultUpload"/>
+                    <Button text="Validate Result" styleClass="button-secondary" onAction="#goToResultValidation"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>

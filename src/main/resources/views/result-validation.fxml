@@ -9,94 +9,94 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21"
+<BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="lims.controllers.ResultValidationController"
-            prefWidth="1180"
-            prefHeight="700">
+            stylesheets="@../styles/theme.css"
+            prefWidth="1280" prefHeight="800">
 
     <top>
-        <VBox spacing="8">
-            <padding>
-                <Insets top="15" right="20" bottom="10" left="20"/>
-            </padding>
-
-            <Label text="Result Validation"
-                   style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-
-            <Label text="Validate uploaded results before they become visible to customers."/>
-
-            <HBox spacing="10">
-                <TextField fx:id="searchResultField"
-                           promptText="Search by customer, test, status, request ID"
-                           prefWidth="360"/>
-
-                <Button fx:id="refreshButton"
-                        text="Refresh"
-                        onAction="#handleRefresh"/>
-
-                <Button fx:id="backButton"
-                        text="Back"
-                        onAction="#handleBack"/>
-            </HBox>
-        </VBox>
+        <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="12">
+            <Label text="Result Validation" styleClass="label-section"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="backButton" text="Back" styleClass="button-secondary" onAction="#handleBack"/>
+        </HBox>
     </top>
 
     <center>
-        <TableView fx:id="resultsTable" prefHeight="430">
-            <columns>
-                <TableColumn fx:id="resultIdColumn" text="Result ID" prefWidth="80"/>
-                <TableColumn fx:id="requestIdColumn" text="Request ID" prefWidth="90"/>
-                <TableColumn fx:id="customerNameColumn" text="Customer" prefWidth="150"/>
-                <TableColumn fx:id="testNameColumn" text="Test" prefWidth="160"/>
-                <TableColumn fx:id="resultFormatColumn" text="Format" prefWidth="90"/>
-                <TableColumn fx:id="paymentStatusColumn" text="Payment" prefWidth="90"/>
-                <TableColumn fx:id="sampleStatusColumn" text="Sample" prefWidth="110"/>
-                <TableColumn fx:id="resultStatusColumn" text="Result" prefWidth="110"/>
-                <TableColumn fx:id="uploadedAtColumn" text="Uploaded At" prefWidth="145"/>
-                <TableColumn fx:id="validatedAtColumn" text="Validated At" prefWidth="145"/>
-            </columns>
-        </TableView>
-    </center>
-
-    <right>
-        <VBox spacing="10" prefWidth="370">
+        <VBox spacing="14">
             <padding>
-                <Insets top="15" right="20" bottom="15" left="20"/>
+                <Insets top="18" right="18" bottom="18" left="18"/>
             </padding>
 
-            <Label text="Result Preview" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+                <Label text="Search:"/>
+                <TextField fx:id="searchResultField" promptText="Customer, test, or result ID" prefWidth="280"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="refreshButton" text="Refresh" styleClass="button-secondary" onAction="#handleRefresh"/>
+            </HBox>
 
-            <TextArea fx:id="resultPreviewArea"
-                      promptText="Select a result to preview"
-                      prefRowCount="14"
-                      wrapText="true"
-                      editable="false"/>
+            <HBox spacing="14" VBox.vgrow="ALWAYS">
+                <VBox styleClass="card" spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="Uploaded Results" styleClass="label-section"/>
 
-            <TextArea fx:id="rejectionReasonArea"
-                      promptText="Reason for rejection, if rejecting"
-                      prefRowCount="4"
-                      wrapText="true"/>
+                    <TableView fx:id="resultsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="resultIdColumn" text="Result ID" prefWidth="90"/>
+                            <TableColumn fx:id="requestIdColumn" text="Req ID" prefWidth="80"/>
+                            <TableColumn fx:id="customerNameColumn" text="Customer" prefWidth="160"/>
+                            <TableColumn fx:id="testNameColumn" text="Test" prefWidth="170"/>
+                            <TableColumn fx:id="resultFormatColumn" text="Format" prefWidth="100"/>
+                            <TableColumn fx:id="paymentStatusColumn" text="Payment" prefWidth="100"/>
+                            <TableColumn fx:id="sampleStatusColumn" text="Sample" prefWidth="100"/>
+                            <TableColumn fx:id="resultStatusColumn" text="Status" prefWidth="110"/>
+                            <TableColumn fx:id="uploadedAtColumn" text="Uploaded At" prefWidth="150"/>
+                            <TableColumn fx:id="validatedAtColumn" text="Validated At" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
 
-            <Label fx:id="errorLabel" textFill="red" wrapText="true"/>
-            <Label fx:id="successLabel" textFill="green" wrapText="true"/>
+                <VBox styleClass="card" spacing="10" prefWidth="380">
+                    <Label text="Result Preview" styleClass="label-section"/>
 
-            <Button fx:id="validateResultButton"
-                    text="Validate Result"
-                    onAction="#handleValidateResult"
-                    maxWidth="330"/>
+                    <TextArea fx:id="resultPreviewArea"
+                              editable="false"
+                              wrapText="true"
+                              VBox.vgrow="ALWAYS"/>
 
-            <Button fx:id="rejectResultButton"
-                    text="Reject Result"
-                    onAction="#handleRejectResult"
-                    maxWidth="330"/>
+                    <TextArea fx:id="rejectionReasonArea"
+                              promptText="Reason for rejection, if rejecting"
+                              prefRowCount="4"
+                              wrapText="true"/>
 
-            <Button fx:id="viewResultButton"
-                    text="View Result"
-                    onAction="#handleViewResult"
-                    maxWidth="330"/>
+                    <Label fx:id="errorLabel" styleClass="label-error" wrapText="true"/>
+                    <Label fx:id="successLabel" styleClass="label-success" wrapText="true"/>
+
+                    <HBox spacing="8">
+                        <Button fx:id="viewResultButton"
+                                text="View"
+                                styleClass="button-secondary"
+                                onAction="#handleViewResult"/>
+
+                        <Button fx:id="validateResultButton"
+                                text="Validate"
+                                styleClass="button-accent"
+                                onAction="#handleValidateResult"/>
+
+                        <Button fx:id="rejectResultButton"
+                                text="Reject"
+                                styleClass="button-danger"
+                                onAction="#handleRejectResult"/>
+                    </HBox>
+
+                    <Label text="Only validated results become visible to customers and trigger email notification."
+                           styleClass="label-muted"
+                           wrapText="true"/>
+                </VBox>
+            </HBox>
         </VBox>
-    </right>
+    </center>
 </BorderPane>
