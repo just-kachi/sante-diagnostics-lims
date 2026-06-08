@@ -1,0 +1,176 @@
+/* =====================================================
+   Sante Diagnostics LIMS  |  Medical/Laboratory Theme
+   ===================================================== */
+
+.root {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-color: #F4F7FB;
+
+    /* Brand palette */
+    -primary:        #0E6BA8;   /* clinical blue */
+    -primary-dark:   #084C7C;
+    -primary-light:  #E8F1F9;
+    -accent:         #14B8A6;   /* lab teal */
+    -accent-dark:    #0F8C7E;
+    -surface:        #FFFFFF;
+    -surface-alt:    #F4F7FB;
+    -border:         #DCE3EC;
+    -text:           #1F2A37;
+    -text-muted:     #6B7785;
+    -success:        #16A34A;
+    -warning:        #D97706;
+    -danger:         #DC2626;
+}
+
+/* ---------- Generic ---------- */
+.label              { -fx-text-fill: -text; }
+.label-muted        { -fx-text-fill: -text-muted; -fx-font-size: 12px; }
+.label-title        { -fx-text-fill: -primary-dark; -fx-font-size: 22px; -fx-font-weight: bold; }
+.label-section      { -fx-text-fill: -primary-dark; -fx-font-size: 15px; -fx-font-weight: bold; }
+.label-stat-value   { -fx-text-fill: -primary-dark; -fx-font-size: 28px; -fx-font-weight: bold; }
+.label-stat-caption { -fx-text-fill: -text-muted; -fx-font-size: 12px; }
+.label-error        { -fx-text-fill: -danger; -fx-font-size: 12px; }
+.label-success      { -fx-text-fill: -success; -fx-font-size: 12px; }
+.label-brand        { -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; }
+.label-countdown    { -fx-text-fill: -accent-dark; -fx-font-size: 15px; -fx-font-weight: bold; }
+
+/* ---------- Buttons ---------- */
+.button {
+    -fx-background-color: -primary;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 18 8 18;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+.button:hover    { -fx-background-color: -primary-dark; }
+.button:disabled { -fx-opacity: 0.55; }
+
+.button-secondary {
+    -fx-background-color: -surface;
+    -fx-text-fill: -primary;
+    -fx-border-color: -primary;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+}
+.button-secondary:hover { -fx-background-color: -primary-light; }
+
+.button-accent          { -fx-background-color: -accent; }
+.button-accent:hover    { -fx-background-color: -accent-dark; }
+
+.button-danger          { -fx-background-color: -danger; }
+.button-danger:hover    { -fx-background-color: derive(-danger, -15%); }
+
+.button-link {
+    -fx-background-color: transparent;
+    -fx-text-fill: -primary;
+    -fx-underline: true;
+    -fx-padding: 4 8 4 8;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom, -primary-dark, -primary);
+    -fx-padding: 22 18 22 18;
+}
+.sidebar .label { -fx-text-fill: #E1EEF8; }
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-alignment: center-left;
+    -fx-padding: 10 14 10 14;
+    -fx-font-weight: normal;
+    -fx-background-radius: 6;
+}
+.sidebar-button:hover { -fx-background-color: rgba(255,255,255,0.15); }
+.sidebar-button-active { -fx-background-color: rgba(255,255,255,0.22); -fx-font-weight: bold; }
+
+/* ---------- Top bar / header ---------- */
+.topbar {
+    -fx-background-color: -surface;
+    -fx-border-color: -border;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 12 22 12 22;
+}
+
+/* ---------- Cards / containers ---------- */
+.card {
+    -fx-background-color: -surface;
+    -fx-background-radius: 10;
+    -fx-border-color: -border;
+    -fx-border-radius: 10;
+    -fx-padding: 18;
+    -fx-effect: dropshadow(gaussian, rgba(14,107,168,0.06), 8, 0, 0, 2);
+}
+.stat-card {
+    -fx-background-color: -surface;
+    -fx-background-radius: 10;
+    -fx-border-color: -border;
+    -fx-border-radius: 10;
+    -fx-padding: 16;
+    -fx-min-width: 180;
+    -fx-effect: dropshadow(gaussian, rgba(14,107,168,0.06), 8, 0, 0, 2);
+}
+.form-section {
+    -fx-background-color: -surface;
+    -fx-background-radius: 10;
+    -fx-border-color: -border;
+    -fx-border-radius: 10;
+    -fx-padding: 18;
+}
+
+/* ---------- Inputs ---------- */
+.text-field, .password-field, .text-area, .combo-box, .date-picker {
+    -fx-background-color: -surface;
+    -fx-border-color: -border;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 6 10 6 10;
+    -fx-text-fill: -text;
+}
+.text-field:focused, .password-field:focused, .text-area:focused,
+.combo-box:focused, .date-picker:focused {
+    -fx-border-color: -primary;
+}
+.text-area .content { -fx-background-color: -surface; }
+
+/* ---------- Tables ---------- */
+.table-view {
+    -fx-background-color: -surface;
+    -fx-border-color: -border;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+.table-view .column-header-background {
+    -fx-background-color: -primary-light;
+    -fx-background-radius: 8 8 0 0;
+}
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.table-view .column-header .label {
+    -fx-text-fill: -primary-dark;
+    -fx-font-weight: bold;
+}
+.table-row-cell:odd  { -fx-background-color: #FAFCFE; }
+.table-row-cell:selected { -fx-background-color: -primary-light; -fx-text-fill: -text; }
+
+/* ---------- Auth layout ---------- */
+.auth-bg {
+    -fx-background-color: linear-gradient(to bottom right, #0E6BA8, #14B8A6);
+}
+.auth-card {
+    -fx-background-color: -surface;
+    -fx-background-radius: 14;
+    -fx-padding: 32;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 18, 0, 0, 6);
+}
+
+/* ---------- Status pills (apply via styleClass from controller) ---------- */
+.pill-success { -fx-background-color: #DCFCE7; -fx-text-fill: #166534; -fx-padding: 2 8 2 8; -fx-background-radius: 10; }
+.pill-warning { -fx-background-color: #FEF3C7; -fx-text-fill: #92400E; -fx-padding: 2 8 2 8; -fx-background-radius: 10; }
+.pill-danger  { -fx-background-color: #FEE2E2; -fx-text-fill: #991B1B; -fx-padding: 2 8 2 8; -fx-background-radius: 10; }
+.pill-info    { -fx-background-color: -primary-light; -fx-text-fill: -primary-dark; -fx-padding: 2 8 2 8; -fx-background-radius: 10; }

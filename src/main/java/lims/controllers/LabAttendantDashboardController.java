@@ -1,8 +1,13 @@
 package lims.controllers;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import lims.database.DatabaseConnection;
 import lims.models.User;
 import lims.utils.SceneManager;
 import lims.utils.Session;
@@ -13,11 +18,70 @@ public class LabAttendantDashboardController {
     private Label welcomeLabel;
 
     @FXML
+    private Label pendingSamplesLabel;
+
+    @FXML
+    private Label processingSamplesLabel;
+
+    @FXML
+    private Label readyForValidationLabel;
+
+    @FXML
+    private Label validatedResultsLabel;
+
+    @FXML
     private void initialize() {
         User user = Session.getInstance().getCurrentUser();
 
         if (user != null && welcomeLabel != null) {
             welcomeLabel.setText("Welcome, " + user.getFullName() + " (Lab Attendant)");
+        }
+
+        loadDashboardStats();
+    }
+
+    private void loadDashboardStats() {
+        setCountLabel(pendingSamplesLabel, """
+                SELECT COUNT(*) AS total
+                FROM samples
+                WHERE sample_status IN ('REQUESTED', 'COLLECTED')
+                """);
+
+        setCountLabel(processingSamplesLabel, """
+                SELECT COUNT(*) AS total
+                FROM samples
+                WHERE sample_status = 'PROCESSING'
+                """);
+
+        setCountLabel(readyForValidationLabel, """
+                SELECT COUNT(*) AS total
+                FROM results
+                WHERE result_status = 'UPLOADED'
+                """);
+
+        setCountLabel(validatedResultsLabel, """
+                SELECT COUNT(*) AS total
+                FROM results
+                WHERE result_status = 'VALIDATED'
+                """);
+    }
+
+    private void setCountLabel(Label label, String sql) {
+        if (label == null) {
+            return;
+        }
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                label.setText(String.valueOf(resultSet.getInt("total")));
+            }
+
+        } catch (SQLException e) {
+            label.setText("0");
+            System.out.println("Lab dashboard stat error: " + e.getMessage());
         }
     }
 
@@ -56,7 +120,7 @@ public class LabAttendantDashboardController {
             e.printStackTrace();
         }
     }
-    
+
     @FXML
     private void goToManageUsers() {
         try {

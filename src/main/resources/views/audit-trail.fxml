@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -10,79 +12,76 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21"
+<BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="lims.controllers.AuditTrailController"
-            prefWidth="1150"
-            prefHeight="680">
+            stylesheets="@../styles/theme.css"
+            prefWidth="1280" prefHeight="780">
 
     <top>
-        <VBox spacing="8">
-            <padding>
-                <Insets top="15" right="20" bottom="10" left="20"/>
-            </padding>
-
-            <Label text="Audit Trail"
-                   style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-
-            <Label text="Immutable system action logs. Logs can be viewed but not edited or deleted."/>
-
-            <HBox spacing="10">
-                <TextField fx:id="searchAuditField"
-                           promptText="Search audit logs"
-                           prefWidth="320"/>
-
-                <ComboBox fx:id="actionFilterComboBox"
-                          promptText="Action"
-                          prefWidth="220"/>
-
-                <Button fx:id="refreshButton"
-                        text="Refresh"
-                        onAction="#handleRefresh"/>
-
-                <Button fx:id="backButton"
-                        text="Back"
-                        onAction="#handleBack"/>
-            </HBox>
-        </VBox>
+        <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="12">
+            <Label text="Audit Trail (Immutable)" styleClass="label-section"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="backButton" text="Back" styleClass="button-secondary" onAction="#handleBack"/>
+        </HBox>
     </top>
 
     <center>
-        <TableView fx:id="auditTable" prefHeight="430">
-            <columns>
-                <TableColumn fx:id="auditIdColumn" text="ID" prefWidth="60"/>
-                <TableColumn fx:id="userEmailColumn" text="User Email" prefWidth="190"/>
-                <TableColumn fx:id="roleColumn" text="Role" prefWidth="130"/>
-                <TableColumn fx:id="actionColumn" text="Action" prefWidth="180"/>
-                <TableColumn fx:id="entityTypeColumn" text="Entity Type" prefWidth="120"/>
-                <TableColumn fx:id="entityIdColumn" text="Entity ID" prefWidth="90"/>
-                <TableColumn fx:id="createdAtColumn" text="Created At" prefWidth="170"/>
-            </columns>
-        </TableView>
-    </center>
+        <VBox spacing="14">
+            <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
 
-    <right>
-        <VBox spacing="10" prefWidth="360">
-            <padding>
-                <Insets top="15" right="20" bottom="15" left="20"/>
-            </padding>
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+                <Label text="Search:"/>
+                <TextField fx:id="searchAuditField" promptText="User, entity, or description" prefWidth="280"/>
+                <Label text="Action:"/>
+                <ComboBox fx:id="actionFilterComboBox" promptText="All" prefWidth="200">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="ALL"/>
+                            <String fx:value="USER_CREATED"/>
+                            <String fx:value="TEST_TYPE_CREATED"/>
+                            <String fx:value="TEST_TYPE_UPDATED"/>
+                            <String fx:value="TEST_TYPE_DELETED"/>
+                            <String fx:value="REQUEST_CREATED"/>
+                            <String fx:value="PAYMENT_MARKED_PAID"/>
+                            <String fx:value="SAMPLE_STATUS_UPDATED"/>
+                            <String fx:value="RESULT_UPLOADED"/>
+                            <String fx:value="RESULT_VALIDATED"/>
+                            <String fx:value="RESULT_REJECTED"/>
+                            <String fx:value="LOGIN"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="refreshButton" text="Refresh" styleClass="button-secondary" onAction="#handleRefresh"/>
+            </HBox>
 
-            <Label text="Log Details" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <HBox spacing="14" VBox.vgrow="ALWAYS">
+                <VBox styleClass="card" spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="Audit Logs" styleClass="label-section"/>
+                    <TableView fx:id="auditTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="auditIdColumn"    text="ID"          prefWidth="70"/>
+                            <TableColumn fx:id="userEmailColumn"  text="User Email"  prefWidth="200"/>
+                            <TableColumn fx:id="roleColumn"       text="Role"        prefWidth="130"/>
+                            <TableColumn fx:id="actionColumn"     text="Action"      prefWidth="170"/>
+                            <TableColumn fx:id="entityTypeColumn" text="Entity Type" prefWidth="130"/>
+                            <TableColumn fx:id="entityIdColumn"   text="Entity ID"   prefWidth="100"/>
+                            <TableColumn fx:id="createdAtColumn"  text="Created At"  prefWidth="170"/>
+                        </columns>
+                    </TableView>
+                </VBox>
 
-            <TextArea fx:id="detailsArea"
-                      promptText="Select a log to view details"
-                      prefRowCount="18"
-                      wrapText="true"
-                      editable="false"/>
-
-            <Label fx:id="errorLabel" textFill="red" wrapText="true"/>
-
-            <Button fx:id="viewDetailsButton"
-                    text="View Details"
-                    onAction="#handleViewDetails"
-                    maxWidth="320"/>
+                <VBox styleClass="card" spacing="10" prefWidth="340">
+                    <Label text="Log Details" styleClass="label-section"/>
+                    <TextArea fx:id="detailsArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS"/>
+                    <Button fx:id="viewDetailsButton" text="View Details" styleClass="button-secondary" onAction="#handleViewDetails"/>
+                    <Label text="Audit logs cannot be edited or deleted." styleClass="label-muted" wrapText="true"/>
+                </VBox>
+            </HBox>
         </VBox>
-    </right>
+    </center>
 </BorderPane>

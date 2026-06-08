@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -10,87 +12,69 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21"
+<BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="lims.controllers.MyRequestsController"
-            prefWidth="1050"
-            prefHeight="650">
+            stylesheets="@../styles/theme.css"
+            prefWidth="1280" prefHeight="780">
 
     <top>
-        <VBox spacing="8">
-            <padding>
-                <Insets top="15" right="20" bottom="10" left="20"/>
-            </padding>
-
-            <Label text="My Test Requests" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-            <Label text="View your test requests, payment status, sample progress, and result readiness."/>
-
-            <HBox spacing="10">
-                <TextField fx:id="searchRequestField"
-                           promptText="Search requests"
-                           prefWidth="280"/>
-
-                <ComboBox fx:id="requestStatusFilterComboBox"
-                          promptText="Filter"
-                          prefWidth="160"/>
-
-                <Button fx:id="refreshButton"
-                        text="Refresh"
-                        onAction="#handleRefresh"/>
-
-                <Button fx:id="backButton"
-                        text="Back"
-                        onAction="#handleBack"/>
-            </HBox>
-        </VBox>
+        <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="12">
+            <Label text="My Test Requests" styleClass="label-section"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="countdownLabel" text="Next ready in: —" styleClass="label-countdown"/>
+            <Region prefWidth="12"/>
+            <Button fx:id="backButton" text="Back" styleClass="button-secondary" onAction="#handleBack"/>
+        </HBox>
     </top>
 
     <center>
-        <TableView fx:id="myRequestsTable" prefHeight="420">
-            <columns>
-                <TableColumn fx:id="requestIdColumn" text="Request ID" prefWidth="90"/>
-                <TableColumn fx:id="testNameColumn" text="Test Name" prefWidth="180"/>
-                <TableColumn fx:id="requestDateColumn" text="Requested At" prefWidth="150"/>
-                <TableColumn fx:id="paymentStatusColumn" text="Payment" prefWidth="100"/>
-                <TableColumn fx:id="sampleStatusColumn" text="Sample" prefWidth="120"/>
-                <TableColumn fx:id="resultStatusColumn" text="Result" prefWidth="120"/>
-                <TableColumn fx:id="estimatedReadyAtColumn" text="Estimated Ready" prefWidth="160"/>
-            </columns>
-        </TableView>
-    </center>
+        <VBox spacing="14">
+            <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
 
-    <right>
-        <VBox spacing="10" prefWidth="330">
-            <padding>
-                <Insets top="15" right="20" bottom="15" left="20"/>
-            </padding>
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+                <Label text="Search:"/>
+                <TextField fx:id="searchRequestField" promptText="Test or request ID" prefWidth="260"/>
+                <Label text="Status:"/>
+                <ComboBox fx:id="requestStatusFilterComboBox" promptText="All" prefWidth="160">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="ALL"/>
+                            <String fx:value="ACTIVE"/>
+                            <String fx:value="COMPLETED"/>
+                            <String fx:value="CANCELLED"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="refreshButton" text="Refresh" styleClass="button-secondary" onAction="#handleRefresh"/>
+            </HBox>
 
-            <Label text="Request Details" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <HBox spacing="14" VBox.vgrow="ALWAYS">
+                <VBox styleClass="card" spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="My Requests" styleClass="label-section"/>
+                    <TableView fx:id="myRequestsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="requestIdColumn"        text="Req ID"        prefWidth="80"/>
+                            <TableColumn fx:id="testNameColumn"         text="Test"          prefWidth="200"/>
+                            <TableColumn fx:id="requestDateColumn"      text="Requested"     prefWidth="140"/>
+                            <TableColumn fx:id="paymentStatusColumn"    text="Payment"       prefWidth="100"/>
+                            <TableColumn fx:id="sampleStatusColumn"     text="Sample Status" prefWidth="130"/>
+                            <TableColumn fx:id="resultStatusColumn"     text="Result Status" prefWidth="130"/>
+                            <TableColumn fx:id="estimatedReadyAtColumn" text="Estimated Ready" prefWidth="160"/>
+                        </columns>
+                    </TableView>
+                </VBox>
 
-            <TextArea fx:id="requestDetailsArea"
-                      promptText="Select a request to view details"
-                      prefRowCount="14"
-                      wrapText="true"
-                      editable="false"/>
-
-            <Label fx:id="countdownLabel"
-                   text="Countdown: Select a request to view time remaining."
-                   wrapText="true"/>
-
-            <Label fx:id="errorLabel" textFill="red" wrapText="true"/>
-            <Label fx:id="successLabel" textFill="green" wrapText="true"/>
-
-            <Button fx:id="viewDetailsButton"
-                    text="View Details"
-                    onAction="#handleViewDetails"
-                    maxWidth="290"/>
-
-            <Button fx:id="viewPaymentDetailsButton"
-                    text="View / Pay Now"
-                    onAction="#handleViewPaymentDetails"
-                    maxWidth="290"/>
+                <VBox styleClass="card" spacing="10" prefWidth="340">
+                    <Label text="Request Details" styleClass="label-section"/>
+                    <TextArea fx:id="requestDetailsArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS"/>
+                    <Button fx:id="viewDetailsButton" text="View Details" styleClass="button-secondary" onAction="#handleViewDetails"/>
+                </VBox>
+            </HBox>
         </VBox>
-    </right>
+    </center>
 </BorderPane>

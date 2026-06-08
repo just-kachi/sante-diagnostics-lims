@@ -87,6 +87,8 @@ public class RequestQueueController {
         loadRequests();
     }
 
+
+
     private void setupPageTitle() {
         User user = Session.getInstance().getCurrentUser();
 

@@ -3,42 +3,121 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="lims.controllers.CustomerDashboardController"
-      alignment="CENTER"
-      spacing="15"
-      prefWidth="700"
-      prefHeight="560">
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lims.controllers.CustomerDashboardController"
+            stylesheets="@../styles/theme.css"
+            prefWidth="1200" prefHeight="760">
 
-    <padding>
-        <Insets top="40" right="60" bottom="40" left="60"/>
-    </padding>
+    <left>
+        <VBox spacing="6" styleClass="sidebar" prefWidth="240">
+            <Label text="Sante Diagnostics" styleClass="label-brand"/>
+            <Label text="CUSTOMER"/>
+            <Region prefHeight="20"/>
 
-    <Label text="Customer Dashboard" style="-fx-font-size: 26px; -fx-font-weight: bold;"/>
-    <Label fx:id="welcomeLabel" text="Welcome, Customer"/>
+            <Button text="Dashboard"
+                    styleClass="sidebar-button,sidebar-button-active"
+                    maxWidth="Infinity"/>
 
-    <Label text="Customer Transparency and Access" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <Button fx:id="browseTestsButton"
+                    text="Browse Tests"
+                    styleClass="sidebar-button"
+                    maxWidth="Infinity"
+                    onAction="#goToBrowseTests"/>
 
-    <Button fx:id="browseTestsButton"
-            text="Browse Available Tests"
-            onAction="#goToBrowseTests"
-            maxWidth="300"/>
+            <Button fx:id="myRequestsButton"
+                    text="My Requests"
+                    styleClass="sidebar-button"
+                    maxWidth="Infinity"
+                    onAction="#goToMyRequests"/>
 
-    <Button fx:id="myRequestsButton"
-            text="My Requests"
-            onAction="#goToMyRequests"
-            maxWidth="300"/>
+            <Button fx:id="customerResultsButton"
+                    text="My Results"
+                    styleClass="sidebar-button"
+                    maxWidth="Infinity"
+                    onAction="#goToCustomerResults"/>
 
-    <Button fx:id="customerResultsButton"
-            text="Result Vault"
-            onAction="#goToCustomerResults"
-            maxWidth="300"/>
+            <Button fx:id="profileButton"
+                    text="Profile"
+                    styleClass="sidebar-button"
+                    maxWidth="Infinity"
+                    onAction="#goToProfile"/>
 
-    <Button fx:id="logoutButton"
-            text="Logout"
-            onAction="#handleLogout"
-            maxWidth="300"/>
-</VBox>
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Button fx:id="logoutButton"
+                    text="Logout"
+                    styleClass="sidebar-button"
+                    maxWidth="Infinity"
+                    onAction="#handleLogout"/>
+        </VBox>
+    </left>
+
+    <top>
+        <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="12">
+            <Label fx:id="welcomeLabel" text="Welcome" styleClass="label-section"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Patient Portal" styleClass="label-muted"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="18">
+            <padding>
+                <Insets top="22" right="22" bottom="22" left="22"/>
+            </padding>
+
+            <HBox spacing="16">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Active Requests" styleClass="label-stat-caption"/>
+                    <Label fx:id="activeRequestsLabel" text="0" styleClass="label-stat-value"/>
+                </VBox>
+
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Ready Results" styleClass="label-stat-caption"/>
+                    <Label fx:id="readyResultsLabel" text="0" styleClass="label-stat-value"/>
+                </VBox>
+
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Past Results" styleClass="label-stat-caption"/>
+                    <Label fx:id="pastResultsLabel" text="0" styleClass="label-stat-value"/>
+                </VBox>
+            </HBox>
+
+            <VBox styleClass="card" spacing="8">
+                <Label text="Next Result" styleClass="label-section"/>
+                <Label fx:id="nextResultCountdownLabel"
+                       text="No active request"
+                       styleClass="label-countdown"/>
+                <Label text="Countdown is based on estimated turn-around time."
+                       styleClass="label-muted"/>
+            </VBox>
+
+            <VBox styleClass="card" spacing="10">
+                <Label text="Quick Actions" styleClass="label-section"/>
+
+                <HBox spacing="10">
+                    <Button text="Browse Tests"
+                            onAction="#goToBrowseTests"/>
+
+                    <Button text="My Requests"
+                            styleClass="button-accent"
+                            onAction="#goToMyRequests"/>
+
+                    <Button text="My Results"
+                            styleClass="button-secondary"
+                            onAction="#goToCustomerResults"/>
+
+                    <Button text="Profile"
+                            styleClass="button-secondary"
+                            onAction="#goToProfile"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>

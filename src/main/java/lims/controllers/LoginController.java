@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.CheckBox;
 import lims.models.User;
 import lims.services.AuthService;
 import lims.utils.SceneManager;
@@ -21,6 +22,12 @@ public class LoginController {
     private PasswordField passwordField;
 
     @FXML
+    private TextField visiblePasswordField;
+
+    @FXML
+    private CheckBox showPasswordCheckBox;
+
+    @FXML
     private Label errorLabel;
 
     private final AuthService authService = new AuthService();
@@ -28,7 +35,9 @@ public class LoginController {
     @FXML
     private void handleLogin() {
         String email = emailField.getText().trim();
-        String password = passwordField.getText();
+        String password = showPasswordCheckBox != null && showPasswordCheckBox.isSelected()
+                ? visiblePasswordField.getText()
+                : passwordField.getText();
 
         clearMessages();
 
@@ -65,6 +74,28 @@ public class LoginController {
             showError("Screen loading error: " + e.getMessage());
         }
     }
+
+    @FXML
+    private void togglePasswordVisibility() {
+        if (showPasswordCheckBox.isSelected()) {
+            visiblePasswordField.setText(passwordField.getText());
+
+            visiblePasswordField.setVisible(true);
+            visiblePasswordField.setManaged(true);
+
+            passwordField.setVisible(false);
+            passwordField.setManaged(false);
+        } else {
+            passwordField.setText(visiblePasswordField.getText());
+
+            passwordField.setVisible(true);
+            passwordField.setManaged(true);
+
+            visiblePasswordField.setVisible(false);
+            visiblePasswordField.setManaged(false);
+        }
+    }
+
 
     @FXML
     private void goToRegister() {

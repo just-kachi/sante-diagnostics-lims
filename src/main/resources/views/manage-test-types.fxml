@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -10,96 +12,90 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21"
+<BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="lims.controllers.ManageTestTypesController"
-            prefWidth="1000"
-            prefHeight="650">
+            stylesheets="@../styles/theme.css"
+            prefWidth="1320" prefHeight="800">
 
     <top>
-        <VBox spacing="8">
-            <padding>
-                <Insets top="15" right="20" bottom="10" left="20"/>
-            </padding>
-
-            <Label text="Manage Test Types" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-            <Label text="Create and configure laboratory tests, prices, turnaround times, and result formats."/>
-
-            <HBox spacing="10">
-                <TextField fx:id="searchTestTypeField"
-                           promptText="Search by name, category, format, or price"
-                           prefWidth="420"/>
-
-                <Button fx:id="refreshButton"
-                        text="Refresh"
-                        onAction="#handleRefresh"/>
-
-                <Button fx:id="backButton"
-                        text="Back"
-                        onAction="#handleBack"/>
-            </HBox>
-        </VBox>
+        <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="12">
+            <Label text="Manage Test Types" styleClass="label-section"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="backButton" text="Back" styleClass="button-secondary" onAction="#handleBack"/>
+        </HBox>
     </top>
 
     <center>
-        <TableView fx:id="testTypesTable" prefHeight="400">
-            <columns>
-                <TableColumn fx:id="testTypeIdColumn" text="ID" prefWidth="60"/>
-                <TableColumn fx:id="testNameColumn" text="Name" prefWidth="160"/>
-                <TableColumn fx:id="testCategoryColumn" text="Category" prefWidth="120"/>
-                <TableColumn fx:id="priceColumn" text="Price" prefWidth="100"/>
-                <TableColumn fx:id="tatHoursColumn" text="TAT Hours" prefWidth="100"/>
-                <TableColumn fx:id="resultFormatColumn" text="Format" prefWidth="100"/>
-                <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="250"/>
-                <TableColumn fx:id="activeColumn" text="Active" prefWidth="80"/>
-            </columns>
-        </TableView>
+        <HBox spacing="16">
+            <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
+
+            <!-- Form -->
+            <VBox styleClass="form-section" spacing="10" prefWidth="420">
+                <Label text="Test Type Details" styleClass="label-section"/>
+
+                <Label text="Test name"/>
+                <TextField fx:id="testNameField" promptText="e.g. Complete Blood Count"/>
+
+                <Label text="Category"/>
+                <TextField fx:id="testCategoryField" promptText="e.g. Hematology"/>
+
+                <Label text="Price (NGN)"/>
+                <TextField fx:id="priceField" promptText="0.00"/>
+
+                <Label text="Turn-around time (hours)"/>
+                <TextField fx:id="tatHoursField" promptText="e.g. 24"/>
+
+                <Label text="Result format"/>
+                <ComboBox fx:id="resultFormatComboBox" promptText="Select result format" maxWidth="Infinity">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="NUMERIC"/>
+                            <String fx:value="TEXT"/>
+                            <String fx:value="PDF"/>
+                            <String fx:value="IMAGE"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+
+                <Label text="Description"/>
+                <TextArea fx:id="descriptionArea" promptText="Optional description" prefRowCount="4" wrapText="true"/>
+
+                <Label fx:id="errorLabel" styleClass="label-error" wrapText="true"/>
+                <Label fx:id="successLabel" styleClass="label-success" wrapText="true"/>
+
+                <HBox spacing="8">
+                    <Button fx:id="addTestTypeButton" text="Add" onAction="#handleAddTestType"/>
+                    <Button fx:id="updateTestTypeButton" text="Update" styleClass="button-accent" onAction="#handleUpdateTestType"/>
+                    <Button fx:id="deleteTestTypeButton" text="Delete" styleClass="button-danger" onAction="#handleDeleteTestType"/>
+                    <Button fx:id="clearFormButton" text="Clear" styleClass="button-secondary" onAction="#handleClearForm"/>
+                </HBox>
+            </VBox>
+
+            <!-- Table -->
+            <VBox styleClass="card" spacing="10" HBox.hgrow="ALWAYS">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Available Tests" styleClass="label-section"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="searchTestTypeField" promptText="Search by name or category" prefWidth="260"/>
+                    <Button fx:id="refreshButton" text="Refresh" styleClass="button-secondary" onAction="#handleRefresh"/>
+                </HBox>
+
+                <TableView fx:id="testTypesTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="testTypeIdColumn"   text="ID"           prefWidth="60"/>
+                        <TableColumn fx:id="testNameColumn"     text="Test Name"    prefWidth="200"/>
+                        <TableColumn fx:id="testCategoryColumn" text="Category"     prefWidth="140"/>
+                        <TableColumn fx:id="priceColumn"        text="Price"        prefWidth="100"/>
+                        <TableColumn fx:id="tatHoursColumn"     text="TAT (hrs)"    prefWidth="100"/>
+                        <TableColumn fx:id="resultFormatColumn" text="Result Format" prefWidth="130"/>
+                        <TableColumn fx:id="descriptionColumn"  text="Description"  prefWidth="240"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </HBox>
     </center>
-
-    <right>
-        <VBox spacing="10" prefWidth="320">
-            <padding>
-                <Insets top="15" right="20" bottom="15" left="20"/>
-            </padding>
-
-            <Label text="Test Type Form" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-
-            <TextField fx:id="testNameField" promptText="Test name"/>
-            <TextField fx:id="testCategoryField" promptText="Category e.g. Blood, Imaging"/>
-            <TextField fx:id="priceField" promptText="Price e.g. 5000"/>
-            <TextField fx:id="tatHoursField" promptText="TAT in hours e.g. 24"/>
-
-            <ComboBox fx:id="resultFormatComboBox" promptText="Result format" prefWidth="280"/>
-
-            <TextArea fx:id="descriptionArea"
-                      promptText="Description"
-                      prefRowCount="5"
-                      wrapText="true"/>
-
-            <Label fx:id="errorLabel" textFill="red" wrapText="true"/>
-            <Label fx:id="successLabel" textFill="green" wrapText="true"/>
-
-            <Button fx:id="addTestTypeButton"
-                    text="Add Test Type"
-                    onAction="#handleAddTestType"
-                    maxWidth="280"/>
-
-            <Button fx:id="updateTestTypeButton"
-                    text="Update Selected"
-                    onAction="#handleUpdateTestType"
-                    maxWidth="280"/>
-
-            <Button fx:id="deleteTestTypeButton"
-                    text="Deactivate Selected"
-                    onAction="#handleDeleteTestType"
-                    maxWidth="280"/>
-
-            <Button fx:id="clearFormButton"
-                    text="Clear Form"
-                    onAction="#handleClearForm"
-                    maxWidth="280"/>
-        </VBox>
-    </right>
 </BorderPane>
