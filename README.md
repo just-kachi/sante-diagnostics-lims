@@ -1,4 +1,10 @@
-# Sante Diagnostics LIMS
+# Sante Diagnostics LIMS (GROUP 4)
+
+Contributors to this project
+1) Kachi Eboegbune - 23120111012
+2) Ikenna Duruoha - 23120111011
+3) Charles Edozie - 23120111013  
+
 
 Installation and run guide for Apache NetBeans.
 
